@@ -1,6 +1,4 @@
-#summary One-sentence summary of this page.
 #labels Featured
-
 = Introduction =
 
 Currently, video analysis algorithms suffer from lack of information regarding the objects present, their interactions, as well as from missing comprehensive annotated video databases for benchmarking. LabelMeVideo is an online and openly accessible video annotation system that allows anyone with a browser and internet access to efficiently annotate object category, shape, motion, and activity information in real-world videos. Using this system, our aim is build and maintain 
