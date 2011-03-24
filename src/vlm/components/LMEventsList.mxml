@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!---
+Copyright (c) 2011 Jenny Yuen. 
+MIT Computer Science and Artificial Intelligence Laboratory
+jenny@csail.mit.edu
+-->
+<mx:Panel title="Events in this video" xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" minHeight="480" minWidth="300" 
+	paddingTop="10" paddingBottom="10" paddingLeft="10" paddingRight="10" xmlns:controls="vlm.components.videoplayer.controls.*"
+	 xmlns:videoplayer="vlm.components.videoplayer.*" xmlns:components="vlm.components.*">
+	<mx:Script>
+		<![CDATA[
+			import vlm.events.LMEventsEvent;
+			private function onAddEventClick():void
+			{
+				var e:LMEventsEvent = new LMEventsEvent(LMEventsEvent.ADDEVENTCLICK);
+				dispatchEvent(e);
+			}
+			public function objectItemLabelFunc(value:Object):String {
+				var text:String = "";
+				if(null!=value)
+				{
+					super.data = value;
+					var text:String = data.sentence;
+				}
+				return text;
+			}
+			
+			private function onCheckBoxChange(event:Event):void
+			{
+				var selected:Boolean = this.showEventsCheckBox.selected;
+				var e:LMEventsEvent;
+				if(selected)
+					e = new LMEventsEvent(LMEventsEvent.SHOWEVENTS);
+				else
+					e = new LMEventsEvent(LMEventsEvent.HIDEEVENTS);
+				dispatchEvent(e);
+			}
+		]]>
+	</mx:Script>
+	
+    <mx:VBox x="0" y="0" width="100%" height="100%" >
+	    <components:ExposedList id="source" width="100%"  borderStyle="none" color="blue" height="100%">	
+	    </components:ExposedList>	
+		<mx:HBox>
+			<mx:LinkButton x="0" y="1" label="Add event..." click="onAddEventClick()"/>
+			<mx:CheckBox id="showEventsCheckBox" change="onCheckBoxChange(event)" selected="true"/>
+			<mx:Label text="show events"/>				
+		</mx:HBox>
+	   
+    </mx:VBox>
+</mx:Panel>

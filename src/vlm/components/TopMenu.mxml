@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!---
+Copyright (c) 2011 Jenny Yuen. 
+MIT Computer Science and Artificial Intelligence Laboratory
+jenny@csail.mit.edu
+-->
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" xmlns:eventcallout="vlm.components.eventcallout.*" xmlns:lmannotator="vlm.components.videoplayer.controls.lmannotator.*" creationComplete="onCreate()">
+
+	 <mx:Style>
+        .allButtons {
+            /* Creates a gradient from red/orange when button is in the
+               "out" state. */
+            fillColors: red, haloOrange;
+        }
+
+        .allButtons4 {
+            /* Creates a gradient from red/orange when button is in the
+               "out" state. Creates a gradient from green/blue when
+               button is in the "over" state. */
+            borderStyle: none;
+        }
+
+        .allButtonsSolid {
+            fillColors: white, red;
+        }
+
+        .allButtonsSolidOpaque {
+           fillAlphas: 1.0, 1.0, 1.0, 1.0;
+           fillColors: white, gray, gray, white;
+        }
+		 Label{
+			 font-size:50
+		 }
+    </mx:Style>
+
+	
+	<mx:Script>
+        <![CDATA[
+			import mx.controls.buttonBarClasses.ButtonBarButton;
+			import mx.core.UIComponent;
+			import mx.events.ItemClickEvent;
+			import mx.skins.halo.ButtonBarButtonSkin;
+			
+			import vlm.MTData;
+			import vlm.events.LMEvent;
+
+			[Embed('assets/submitHit.png')]
+			private static var submitHitIcon:Class;
+		
+			[Embed('assets/submitHit_down.png')]
+			private static var submitHitDownIcon:Class;
+			
+			[Embed('assets/submitHit_disabled.png')]
+			private static var submitHitDisabledIcon:Class;
+			
+			private static var mtMode:Boolean = false;
+			private var _binMode:Boolean = true;
+			private var _eventAnnotationComponent:LMEventCallout;
+			private var _eventAnnotatorIn:Boolean;
+			
+			private var _fileRef:FileReference;
+			private var _vlmFilter:FileFilter = new FileFilter("VLM annotations", "*.vlm");
+
+			public function switchToBinMode():void
+			{
+				//sets different icons and layout	
+			}
+			
+			public function switchToXMLMode():void
+			{
+				
+			}
+			public function enableMTMode(mtData:MTData):void
+			{
+				if(mtData && mtData._mtMode && saveButton)
+				{
+					this.saveButton.setStyle("skin", submitHitIcon);
+					this.saveButton.setStyle("overSkin", submitHitDownIcon);
+					this.saveButton.setStyle("downSkin", submitHitDownIcon);
+					this.saveButton.setStyle("disabledSkin", submitHitDisabledIcon);
+					
+					this.refreshButton.visible = false;
+					this.mtMessage.visible= true;
+				}
+			}
+ 			
+ 			public function setXMLLink(html:String):void
+ 			{
+ 				this.xmlSourceLabel.htmlText = "<b><u><a href=\"" + html + "\" target=\"_blank\" >" + "XML"  + "</a></u></b>";
+ 			}
+ 			
+ 			public function setFrameLink(html:String):void
+ 			{
+ 				this.frameSourceLabel.htmlText =  "<b><u><a href=\"" + html + "\" target=\"_blank\" >" + "Frames"  + "</a></u></b>";
+ 			}	      
+ 			
+ 			public function disableSave():void
+ 			{
+ 				saveButton.enabled = false;
+ 			} 
+ 			
+ 			public function disableErase():void
+ 			{
+ 				this.eraseButton.enabled = false;
+ 			} 
+ 			public function enableSave():void
+			{
+				if(!saveButton.visible)
+					saveButton.visible = true;	
+				saveButton.enabled = true;
+			}
+			
+			public function onSaveClick():void
+			{
+				var e:LMEvent = new LMEvent(LMEvent.SAVEANNOTATIONSREQUEST);
+					dispatchEvent(e);
+				
+			}	
+			
+			public function onEraseClick():void
+			{
+          		var e:LMEvent = new LMEvent(LMEvent.ERASEREQUEST);
+        		dispatchEvent(e);			
+			}
+			
+			public function onRefreshClick():void
+			{
+				var ref:URLRequest = new URLRequest("javascript:location.reload(true)");
+				navigateToURL(ref, "_self");
+      		}
+					
+			//add the event annotation component
+			public function addEventAnnotationComponent(eventAnnotationComponent:LMEventCallout):void
+			{
+				this._eventAnnotationComponent = eventAnnotationComponent;
+				var index:int = buttonBar.getChildIndex(buttonBarHBox)+1;
+				buttonBar.addChildAt(eventAnnotationComponent, index);
+				_eventAnnotatorIn = true;
+				this.invalidateDisplayList();
+				
+			}
+			
+			public function removeEventAnnotationComponent():void
+			{
+				
+				if(_eventAnnotatorIn)
+				{	
+					buttonBar.removeChild(_eventAnnotationComponent);
+					_eventAnnotatorIn = false;
+				}
+				this.invalidateDisplayList();
+			}
+			
+			private function onOpenClick():void {
+		
+				var e:LMEvent = new LMEvent(LMEvent.OPENANNOTATIONSREQUEST);
+				dispatchEvent(e);
+			}
+						
+			
+			
+			
+           private function onCreate():void
+           {
+       			this._fileRef = new FileReference();
+				
+				_fileRef.addEventListener(Event.SELECT, onFileRefSelect);
+				_fileRef.addEventListener(ProgressEvent.PROGRESS, onFileRefProgress);
+				_fileRef.addEventListener(Event.COMPLETE, onFileRefComplete);
+           }
+           
+			private function onFileRefSelect(event:Event):void
+			{
+				try {
+				} catch (err:Error) {
+				}
+				
+			}
+			private function onFileRefProgress(event:ProgressEvent):void
+			{
+				
+			}
+			
+			private function onFileRefComplete(event:Event):void
+			{
+				
+			}
+		
+        
+        ]]>
+     </mx:Script>
+    <mx:VBox id="buttonBar"> 	
+	    <mx:HBox id="buttonBarHBox">
+		 	<mx:VBox >
+				<mx:Image id="logo" source="assets/VLMLogo.png"/> 
+				<mx:Label id="mtMessage" visible="false" width="0" text="For a successful HIT, make sure polygons are delineating the objects at all times. Play the video again to review your annotations before submitting">
+				</mx:Label>
+			</mx:VBox>
+			<mx:VBox>		
+				<mx:HBox>
+					<mx:Button  buttonMode="true" useHandCursor="true" id="refreshButton" click="onRefreshClick()" skin="@Embed('assets/refresh.png')"  overSkin="@Embed('assets/refresh_down.png')" downSkin="@Embed('assets/refresh_down.png')"/>
+					<mx:Button buttonMode="true" useHandCursor="true" id="eraseButton" click="onEraseClick()" skin="@Embed('assets/erase.png')"  overSkin="@Embed('assets/erase_down.png')" downSkin="@Embed('assets/erase_down.png')"/>
+					<mx:Button buttonMode="true" useHandCursor="true" id="saveButton"  click="onSaveClick()" skin="@Embed('assets/save.png')"  overSkin="@Embed('assets/save_down.png')" downSkin="@Embed('assets/save_down.png')" enabled="false"/>	
+					<mx:Button buttonMode="true" useHandCursor="true" id="openButton"  click="onOpenClick()" skin="@Embed('assets/open.png')"  overSkin="@Embed('assets/open_down.png')" downSkin="@Embed('assets/open_down.png')" enabled="true"/>	
+				</mx:HBox>	
+				<mx:HBox>
+					<mx:Label id="xmlSourceLabel" ></mx:Label>
+					<mx:Label id="frameSourceLabel" ></mx:Label>
+					<mx:Label id= "annotationModeLabel" width="500" text="If the video doesn't appear, click Refresh.">
+					</mx:Label>
+				</mx:HBox>
+				
+			</mx:VBox>
+		</mx:HBox>
+	</mx:VBox>
+	
+	<mx:HBox visible="true">
+		<mx:Label text="X:"/>
+		<mx:Label id="xLabel"/>
+		<mx:Label text="Y:"/>
+		<mx:Label id="yLabel"/>
+		<mx:Label text="Current Status:"/>
+		<mx:Label id="statusLabel"  text="ready           " />
+		
+		<mx:Label text="Poly hit:" visible = "false"/>
+		<mx:Label id="polyHit"  width="124"/>
+	</mx:HBox>
+	
+</mx:HBox>

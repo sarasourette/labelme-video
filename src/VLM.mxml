@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!---
+Copyright (c) 2011 Jenny Yuen. 
+MIT Computer Science and Artificial Intelligence Laboratory
+jenny@csail.mit.edu
+-->
+<mx:Application   xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="vlm.components.videoplayer.controls.*" 
+	backgroundColor="#FFFFFF"  xmlns:ns1="*" xmlns:lmannotator="vlm.components.videoplayer.controls.lmannotator.*"
+	xmlns:ns3="com.fxcomponents.lmobjectlist.*" creationComplete="init(event)"  width="100%" height="100%" scriptTimeLimit="60" 
+	>
+	<mx:Style>
+		@namespace "http://www.adobe.com/2006/mxml";
+		 LMCalloutContainer {
+            backgroundGradientColors: #CAE4FF, #99CCFF;
+            backgroundAlpha: 1;
+            borderStyle: "topRightCallout";
+            calloutPointerWidth: 10;
+            calloutOffsetX: 4;
+            calloutOffsetY: 7;
+            borderSkin: ClassReference("vlm.skins.LMCalloutBorder");        
+            cornerRadius: 7;
+            paddingBottom: 5;
+            paddingLeft: 5;
+            paddingRight: 5;
+            paddingTop: 5;
+        }
+
+		LMEventCallout {
+			backgroundColor: #99CCFF;
+			backgroundAlpha: 1;
+			cornerRadius: 14;
+			paddingLeft: 10;
+			paddingTop: 10;
+			paddingRight: 10;
+			paddingBottom: 10;
+			borderSkin: ClassReference("vlm.skins.RoundBorderSkin");        
+		}
+		
+	
+        .controlBarCanvas
+        {
+	  	
+        }  
+        .videoControlBar
+        {
+        	
+        	paddingBottom: 500;
+            paddingLeft: 500;
+            paddingRight: 500;
+            paddingTop: 500;
+        }
+      
+        ExposedList
+        {
+        	
+        	verticalScrollBarStyleName: myVScrollBarStyleName;
+            horizontalScrollBarStyleName: myHScrollBarStyleName;
+        	rollOverColor:"0xFFF200";
+        	
+        }   
+        
+     	.ObjListPanel
+     	{
+     		border-skin:Embed("assets/box.png");
+     	}
+      
+     	.myVScrollBarStyleName {
+            downArrowSkin: Embed("assets/cur2038.png");
+            upArrowSkin: Embed("assets/cur2038.png");
+            trackColors: white, white;
+            borderColor: "0x00FF00";
+            fillColors: white, white;
+            upArrowUpSkin: Embed("assets/upArrow.png");
+            upArrowOverSkin: Embed("assets/upArrow_down.png");
+            upArrowDownSkin: Embed("assets/upArrow_down.png");
+            upArrowDisabledSkin: Embed("assets/upArrow_disabled.png");
+            downArrowUpSkin: Embed("assets/downArrow.png");
+            downArrowOverSkin: Embed("assets/downArrow_down.png");
+            downArrowDownSkin: Embed("assets/downArrow_down.png");
+            downArrowDisabledSkin: Embed("assets/downArrow_disabled.png");
+           	thumbSkin: Embed("assets/sliderThumb.png");
+            thumbOverSkin: Embed("assets/sliderThumb_down.png");
+            thumbDownSkin: Embed("assets/sliderThumb_down.png");
+        }
+
+        .myHScrollBarStyleName {
+            downArrowSkin: Embed("assets/cur2038.png");
+            upArrowSkin: Embed("assets/cur2038.png");
+        }
+		Menu{
+			layoutDirection: "ltr";
+		}
+		Alert{
+			color : #124332;
+			background-color: #ffffff;
+			header-colors : #00B2EE, #00B2EE;
+			header-height:19;
+			drop-shadow-enabled: true;
+			drop-shadow-color :#243322;
+			corner-radius :6;
+			border-style :solid;
+			border-thickness: 1;
+			border-color : #243322;
+			footer-colors : #243322, #ffffff;
+			title-style-name : "title";
+			layoutDirection: "ltr";
+		
+			
+		}
+		
+
+		
+	</mx:Style>
+	 <mx:Script>
+    <![CDATA[
+		import mx.containers.TitleWindow;
+		import mx.controls.Alert;
+		import mx.managers.BrowserManager;
+		import mx.managers.IBrowserManager;
+		import mx.utils.URLUtil;
+		
+		import vlm.MTData;
+		import vlm.components.VideoLabelMe;
+		import vlm.core.AnnotationMode;
+		import vlm.util.LMJSUtil;
+
+
+        private var bm:IBrowserManager;
+        [Bindable]
+        private var folder:String;
+        [Bindable]
+        private var fileName:String;            
+		[Bindable]
+		private var mtMode:String; 
+		[Bindable]
+		private var actions:String; 
+		[Bindable]
+		private var annotationMode:String;
+	
+		
+	   private function init(e:Event):void {
+            bm = BrowserManager.getInstance();                
+            bm.init("", "LabelMe video");
+			
+			
+            /* The following code will parse a URL that passes firstName and lastName as
+               query string parameters after the "#" sign; for example:
+               http://www.mydomain.com/MyApp.html#firstName=Nick&lastName=Danger */
+            var o:Object = URLUtil.stringToObject(bm.fragment, "&");        
+            //Alert.show("url parameters: " + bm.fragment);        
+            folder = o.folder;
+            fileName = o.fileName;
+            mtMode = o.mtMode;
+		
+			var binMode:Boolean = o.binMode;
+            var mtInstructionsUrl:String = o.mtInstructions;
+			//a sequence denoting the coordinates of a polygon:f,x1,x2,...,xn,y1,...,yn,
+			var polyStr:String = o.poly;
+			var polyFields:String = o.pFields;	
+            actions = o.actions;
+            if(!actions)
+            {
+            	//actions = "v"; //use this for final release
+            	actions = "v"; //use this for debugging
+            }
+			annotationMode = o.annotMode;
+			
+			if(!annotationMode || annotationMode !=AnnotationMode.BOX)
+			{
+				annotationMode = AnnotationMode.POLYGON;	
+			}
+			if(!folder)
+			{
+				folder = "video_sun_database/p/plaza";	
+			}
+			if(!fileName)
+			{
+				fileName = "sun_vzzrbfbnyplpfriq.flv";
+			}
+			
+			if(!polyStr)
+			{
+			//	polyStr = "0,1000,100,0,0,0,200,200,50";
+				polyStr = "";
+			}
+			if(!polyFields)
+			{
+			//	polyFields = "person,1,walking to the store";
+				polyFields = "";
+			}
+			
+            var boolMTMode:Boolean = (mtMode);
+            var mtData:MTData;
+			
+           // Alert.show(mtMode);
+            if(boolMTMode)
+            {	
+            	var assignmentId:String = o.assignmentId;
+            	var hitId:String = o.hitId;
+            	var sandboxMode:String = o.sandboxMode;
+            	
+            	if(!assignmentId)
+            		assignmentId = "";
+            	if(!hitId)
+            		hitId = "";
+            	if(!sandboxMode)
+	            	sandboxMode == "";
+            	//redirect to instructions page
+            	//Alert.show("mt instruction = " + mtInstructionsUrl);
+             //	Alert.show("assignmentId = >" + assignmentId +"<");
+            	if(mtInstructionsUrl && (assignmentId == "ASSIGNMENT_ID_NOT_AVAILABLE"))
+            	{
+            	
+					Alert.show("redirecting to " + mtInstructionsUrl);
+            		LMJSUtil.jsRedirectToUrl(mtInstructionsUrl);
+            	}
+            //	Alert.show("assignId = " +assignmentId + "hitId= " +hitId);
+            	
+            	mtData = new MTData(boolMTMode, assignmentId, hitId, sandboxMode);
+            }
+            else
+            	mtData = new MTData(false);
+            //	mtData = new MTData(true, "FSWZP25NRYJZ5AZ79T2ZPYNZGGYBG922X7ZHA33Z", "32");
+            
+            
+           	var app:VideoLabelMe;
+           	if(folder && fileName)
+				app = new VideoLabelMe(actions, annotationMode, mtData, binMode, folder,fileName, polyStr, polyFields);
+			else
+				app = new VideoLabelMe(actions, annotationMode, mtData, binMode);
+		
+			
+			app.percentHeight = 100;
+			app.percentWidth = 100;
+			//app.minWidth = 1100;
+		//	app.minHeight = 600;
+			app.setStyle("styleName", "VLM");
+			
+	//		vlm.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			
+			box.addChild(app);
+        }
+		private function onMouseMove(event:MouseEvent):void
+		{
+			trace("VLM mouse moving : " + event.stageX + " , " + event.stageY);
+		}
+    ]]>
+    </mx:Script>
+	<mx:HBox width="100%" height="100%" id="box" backgroundColor="0xFFFFFF">
+		
+	</mx:HBox>
+		
+</mx:Application>

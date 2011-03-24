@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!---
+Copyright (c) 2011 Jenny Yuen. 
+MIT Computer Science and Artificial Intelligence Laboratory
+jenny@csail.mit.edu
+-->
+<mx:Button  xmlns:mx="http://www.adobe.com/2006/mxml" width="21" height="17"  skin="@Embed('assets/prevKF.png')"   
+	upSkin="@Embed('assets/prevKF.png')"  downSkin="@Embed('assets/prevKF_down.png')"  overSkin="@Embed('assets/prevKF_down.png')"
+    disabledSkin="@Embed('assets/prevKF_disabled.png')" toolTip="previous keyframe"
+	 buttonMode="true" useHandCursor="true">
+</mx:Button>

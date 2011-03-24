@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!---
+Copyright (c) 2011 Jenny Yuen. 
+MIT Computer Science and Artificial Intelligence Laboratory
+jenny@csail.mit.edu
+-->
+<components:LMCalloutContainer 
+	xmlns="vlm.components.videoplayer.controls.lmannotator.*" 
+	xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:annotator="vlm.components.annotator.*" xmlns:components="vlm.components.*">	
+	
+<mx:VBox id="contentVBox" >
+	<mx:Label text="What is this object?"/>
+	<mx:TextInput id="textInput" width="150" height="20"/>	
+	<mx:VBox id="motionVBox">	
+		<mx:HBox id="radioButtonBox" x="0" y="0">
+			<mx:RadioButton groupName="motionType"  id="staticType" label="static"/>
+			<mx:RadioButton groupName="motionType"  id="movingType" label="moving"/>
+		</mx:HBox>
+		<mx:VBox id="actionBox">
+			<mx:Label text="What is it doing?"/>
+			<mx:TextInput id="actionInput" width="150" height="20"/>
+		</mx:VBox>	
+	</mx:VBox>	
+	
+	<mx:HBox id="buttonHBox">
+		<mx:Button id="doneButton" label="Done"/>	
+		<mx:LinkButton id="deleteButton" label="Delete" fontSize="8"/>
+	</mx:HBox>
+	
+</mx:VBox>
+</components:LMCalloutContainer>

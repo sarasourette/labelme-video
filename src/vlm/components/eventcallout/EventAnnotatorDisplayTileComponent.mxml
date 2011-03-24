@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!---
+Copyright (c) 2011 Jenny Yuen. 
+MIT Computer Science and Artificial Intelligence Laboratory
+jenny@csail.mit.edu
+-->
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+	<mx:Label id="tokenLabel" text="{data.name}" paddingBottom="0" paddingTop="0" paddingLeft="0" paddingRight="0" accessibilityDescription=""> </mx:Label>
+</mx:VBox>

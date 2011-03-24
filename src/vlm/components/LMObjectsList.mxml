@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!---
+Copyright (c) 2011 Jenny Yuen. 
+MIT Computer Science and Artificial Intelligence Laboratory
+jenny@csail.mit.edu
+-->
+<mx:Panel  xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="vlm.components.videoplayer.controls.*" xmlns:videoplayer="vlm.component.videoplayer.*" 
+		   height="100%" width="100%"  paddingTop="10" paddingBottom="10" paddingLeft="10" paddingRight="10" title="Objects in this Video" xmlns:components="vlm.components.*" >
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.effects.easing.Exponential;
+			import mx.events.IndexChangedEvent;
+			
+			import vlm.events.LMEvent;
+			
+			[Bindable]
+			public var selectedItem:Object;
+			
+			
+			public function onSourceChange():void
+			{
+				selectedItem = source.selectedItem;
+			}
+			
+
+			public function getSourceList():ExposedList
+			{
+				return this.source;
+			}
+			
+			public function objectItemLabelFunc(value:Object):String {
+				var text:String = "";
+				if(null!=value)
+				{
+					super.data = value;
+					
+					var text:String = data.name;
+					if (data.action != "")
+						text = text + " (" + data.action + ")"
+					
+				}
+				return text;
+			}
+			private function onCheckBoxChange(event:Event):void
+			{
+				var selected:Boolean = this.showObjectsCheckBox.selected;
+				var e:LMEvent;
+				if(selected)
+					e = new LMEvent(LMEvent.SHOWOBJECTS);
+				else
+					e = new LMEvent(LMEvent.HIDEOBJECTS);
+				dispatchEvent(e);
+			}
+			
+		]]>
+
+	</mx:Script>
+	<mx:VBox x="0" y="0" width="100%" height="100%">
+	
+		<components:ExposedList id="source"  width="100%"  borderStyle="none" height="100%" color="blue" showDataTips="true" 
+							  variableRowHeight="true" wordWrap="true" change="onSourceChange()"   labelFunction="objectItemLabelFunc">
+		</components:ExposedList>
+		
+		<mx:HBox>
+			<mx:CheckBox id="showObjectsCheckBox" change="onCheckBoxChange(event)" selected="true"/>
+			<mx:Label text="show objects"/>				
+		</mx:HBox>
+		
+	</mx:VBox>
+	
+</mx:Panel>

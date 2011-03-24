@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<mx:Button  xmlns:mx="http://www.adobe.com/2006/mxml" width="41" height="52"  skin="@Embed('assets/fastForward.png')"   
+	upSkin="@Embed('assets/fastForward.png')"  downSkin="@Embed('assets/fastForward.png')"  overSkin="@Embed('assets/fastForward_down.png')"
+    disabledSkin="@Embed('assets/fastForward_disabled.png')"
+	buttonMode="true" useHandCursor="true">
+</mx:Button>
