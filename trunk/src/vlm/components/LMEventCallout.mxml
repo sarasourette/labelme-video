@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!---
+Copyright (c) 2011 Jenny Yuen. 
+MIT Computer Science and Artificial Intelligence Laboratory
+jenny@csail.mit.edu
+-->
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" initialize="onInit(event)" xmlns:controls="vlm.components.videoplayer.controls.*" backgroundAlpha="1" xmlns:components="vlm.components.*">
+	
+	<mx:HBox width="100%"   id="textInputHBox">
+		<mx:Label id="instructionsLabel" text="Describe the event:" fontSize="8"/>
+		<mx:TextInput id="inputTextArea"  width="80%"  change="onInputChange(event)" enter="onRenderButtonClick()" />
+		<mx:Button id="renderSentenceButton"  visible="false" label="Enter" click="onRenderButtonClick()" height="17" styleName="addEventPanelButtonStyle"/>
+	</mx:HBox>   
+	<mx:VBox minWidth="400"  id = "linkerVBox" width="100%">
+		<mx:HBox id="buttonsBox">
+			<mx:Button  id="doneButton" label="Done"  click="onDoneClick()" styleName="addEventPanelButtonStyle" height="20"/>
+			<mx:LinkButton id="deleteButton" label="delete" fontSize="8" click="onDelClick(event)"  styleName="addEventPanelButtonStyle" width="56" height="14"/>
+		</mx:HBox>
+		
+		<components:ExposedTileList  id="tokensTile" direction="horizontal" itemRenderer="vlm.components.eventcallout.EventAnnotatorEditableTileComponent" width="100%" height="53" >                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+		</components:ExposedTileList>
+	</mx:VBox>
+	
+	<mx:Script>
+		<![CDATA[
+			import vlm.core.LMEventAnnotationItem;
+			import vlm.components.eventcallout.EventAnnotatorEditableTileComponent;
+			import vlm.events.LMEventCalloutEvent;
+			import vlm.events.LMEventsEvent;
+			
+			
+			public static var TEXTINPUTMODE:String = "TEXTINPUTMODE";
+			public static var EDITABLELINKERMODE:String = "EDITABLELINKERMODE";
+			public static var READONLYLINKERMODE:String = "READONLYLINKERMODE";
+			
+			//the components
+			private var _textInputHBox:HBox;
+			private var _linkerVBox:VBox;
+			public var _evtItem:LMEventAnnotationItem;
+			private var _buttonsBox:HBox;
+			private var _buttonsIn:Boolean;
+			public var _mode:String;
+			
+			public var _scaleX:Number = NaN;
+			public var _scaleY:Number = NaN;
+			
+			
+			
+			public function setScale(sX:Number, sY:Number):void
+			{
+				_scaleX = sX;
+				_scaleY = sY;
+				
+			}
+			
+			override protected function createChildren():void{
+				super.createChildren();
+				this.addEventListener(MouseEvent.MOUSE_DOWN,handleDown)
+				this.inputTextArea.addEventListener(KeyboardEvent.KEY_DOWN,handleClose);
+
+
+	
+			}
+			private function handleClose(event:KeyboardEvent):void{
+				if (event.keyCode == Keyboard.ESCAPE)
+				{
+					var e:LMEventsEvent = new LMEventsEvent(LMEventsEvent.CANCELEVENTCREATION);
+					dispatchEvent(e);
+				}
+			}
+			
+			private function onInit(event:Event):void
+			{
+				//store all panels
+				_textInputHBox = this.textInputHBox;
+				_linkerVBox = this.linkerVBox;
+				_buttonsBox = this.buttonsBox;
+				this.removeChild(_linkerVBox);
+				_buttonsIn = true;
+				tokensTile.rowCount = 1;
+
+				_mode = LMEventCallout.TEXTINPUTMODE;
+
+			}
+			
+			
+			public function changeDisplayMode(newMode:String):void
+			{
+				_mode = newMode;
+				if(newMode == LMEventCallout.EDITABLELINKERMODE)
+				{
+					this.removeAllChildren();
+					this.addChild(_linkerVBox);
+					this.tokensTile.itemRenderer = new ClassFactory(EventAnnotatorEditableTileComponent);
+					if(!_buttonsIn)
+					{
+						this._linkerVBox.addChildAt(_buttonsBox, 0);
+						_buttonsIn = true;
+					}
+					this._mode = LMEventCallout.EDITABLELINKERMODE;
+				}
+				else if(newMode == LMEventCallout.READONLYLINKERMODE)
+				{
+					this.removeAllChildren();
+					this.addChild(this._linkerVBox);
+					if(_buttonsIn)
+					{
+						this._linkerVBox.removeChild(_buttonsBox);
+						_buttonsIn = false;
+					}
+					this.tokensTile.itemRenderer = new ClassFactory(EventAnnotatorEditableTileComponent);
+					tokensTile.rowCount = 1;
+					//	tokensTile.height = this.measureText(instructionsLabel.text).height;
+					this._mode = LMEventCallout.READONLYLINKERMODE;
+				}
+				else if(newMode == LMEventCallout.TEXTINPUTMODE)
+				{
+					this.removeAllChildren();
+					this.addChild(this._textInputHBox);
+					this.inputTextArea.setFocus();
+					this._mode = LMEventCallout.TEXTINPUTMODE;
+				}
+				else
+				{
+					return;
+				}
+				var e:LMEventCalloutEvent = new LMEventCalloutEvent(LMEventCalloutEvent.CHANGE,true, false);
+				dispatchEvent(e);
+			}
+			
+			private function handleDown(e:Event):void{
+				this.startDrag();
+				trace("starting to move : "+ this.x + " , " + this.y);
+				this.addEventListener(MouseEvent.MOUSE_UP,handleUp)
+				this.addEventListener(MouseEvent.MOUSE_OUT,handleUp)
+				
+			}
+			
+			private function handleUp(e:Event):void{
+				this.stopDrag();
+				trace("moved to : "+ this.x + " , " + this.y);
+				if(this._evtItem)
+				{	
+					if(!isNaN(_scaleY))
+						this._evtItem.y = this.y/this._scaleY;
+					else
+						this._evtItem.y = this.y;
+					
+					if(!isNaN(_scaleX))
+						this._evtItem.x = this.x/this._scaleX;
+					else
+						this._evtItem.x = this.x;
+					
+					
+					if(_evtItem.eid >0)
+					{
+						var evt:LMEventsEvent = new LMEventsEvent(LMEventsEvent.EVENTCHANGED);
+						evt._evtItem = this._evtItem;
+						dispatchEvent(evt);
+					}
+				}
+				this.removeEventListener(MouseEvent.MOUSE_UP,handleUp)
+				this.removeEventListener(MouseEvent.MOUSE_OUT,handleUp)
+				
+				
+			}
+			
+			
+			private function onRenderButtonClick():void
+			{
+				//take the text in the input text area, tokenize it, and render it in the renderedSentenceCanvas
+				var str:String = inputTextArea.text;
+				resetLinker(str);
+				if (_mode == LMEventCallout.EDITABLELINKERMODE )
+				{
+					onDoneClick();
+				}
+				changeDisplayMode(LMEventCallout.EDITABLELINKERMODE);
+			}
+			
+			private function onInputChange(event:Event):void
+			{
+				if(event.target.text != "")
+				{
+					renderSentenceButton.visible = true;
+				}	
+			}
+			
+			private function onDoneClick():void
+			{
+				var evt:LMEventsEvent = new LMEventsEvent(LMEventsEvent.SAVENEWEVENTCLICK, true, true);
+				evt._evtItem = this._evtItem;
+				dispatchEvent(evt);
+			}
+			private function onDelClick(event:Event):void
+			{
+				var evt:LMEventsEvent = new LMEventsEvent(LMEventsEvent.DELETECLICK,true, true);
+				evt._evtItem = this._evtItem;
+				dispatchEvent(evt);
+			}
+			
+			public function getCoordinates(tokenId:int):Point
+			{
+				if(tokenId <0 || this._evtItem.tokens.length >=tokenId)
+				{
+					var tile:EventAnnotatorEditableTileComponent =this.getTileListItem(tokenId);
+					if(tile)
+					{
+						var pt:Point = new Point(tile.link.x + tile.link.width/2, tile.link.y + tile.link.height/2);
+						pt = tile.link.localToGlobal(pt);
+						return pt;
+					}
+				}
+				return null;
+			}
+			
+			private function getTileListItem(id:int):EventAnnotatorEditableTileComponent
+			{
+				var renderers:Array = tokensTile.renderers;
+				if(renderers && renderers.length >0 && renderers[0].length >id)
+					return EventAnnotatorEditableTileComponent(renderers[0][id]);		
+				return null;
+			}
+			
+			
+			public function reset(defaultStartFrame:int=-1, defaultEndFrame:int=-1):void
+			{
+				this.inputTextArea.text = "";
+				this.renderSentenceButton.visible = false;
+				this._evtItem = new LMEventAnnotationItem(-1, defaultStartFrame,  defaultEndFrame, -1, new Dictionary(), new Array(), x, y, "anonymous");
+				resetLinker("");
+			}
+			
+			private function resetLinker(str:String):void
+			{
+				var a:Array = str.split(/[^\w+]/);			
+				_evtItem = new LMEventAnnotationItem(-1, this._evtItem.startFrame, this._evtItem.endFrame, -1, new Dictionary(), new Array(), -1, -1, "anonymous");
+				_evtItem.tokens = a;
+				updateTokens();
+				
+			}
+			
+			private function updateTokens():void
+			{
+				var i:int = 0;
+				
+				var tokensAndIds:Array = new Array();
+				for each(var token:String in _evtItem.tokens)
+				{
+					if(token == "") continue;
+					var obj:Object = new Object();
+					obj.name = token;
+					obj.id  = i++;
+					tokensAndIds.push(obj)
+				}
+				tokensTile.dataProvider = tokensAndIds;	
+			}
+			
+			public function resetLinkerWithEvtItem(evtItem:LMEventAnnotationItem):void
+			{
+				this._evtItem = evtItem;
+				updateTokens();	
+				
+			}
+		]]>
+	</mx:Script>
+</mx:VBox>

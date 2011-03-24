@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!---
+Copyright (c) 2011 Jenny Yuen. 
+MIT Computer Science and Artificial Intelligence Laboratory
+jenny@csail.mit.edu
+-->
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="vlm.components.videoplayer.controls.*" backgroundAlpha="1" xmlns:components="vlm.components.*">
+	<components:ExposedTileList  id="tokensTile" direction="horizontal" itemRenderer="vlm.components.eventcallout.EventAnnotatorEditableTileComponent" width="100%" height="53" >                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+	</components:ExposedTileList>
+	
+	<mx:Script>
+		<![CDATA[
+			import vlm.core.LMEventAnnotationItem;
+			
+			import mx.containers.VBox;
+			
+			public static var TEXTINPUTMODE:String = "TEXTINPUTMODE";
+			public static var EDITABLELINKERMODE:String = "EDITABLELINKERMODE";
+			public static var READONLYLINKERMODE:String = "READONLYLINKERMODE";
+			
+			//the components
+			private var _linkerVBox:VBox;
+			public var _evtItem:LMEventAnnotationItem;
+			override protected function createChildren():void{
+				super.createChildren();
+				this.addEventListener(MouseEvent.MOUSE_DOWN,handleDown)
+				this.addEventListener(MouseEvent.MOUSE_UP,handleUp)
+				this.addEventListener(MouseEvent.MOUSE_OUT,handleUp)
+				this.addEventListener(MouseEvent.DOUBLE_CLICK, onDoubleClick);
+				this.addEventListener(MouseEvent.CLICK, onClick);
+				
+			}
+			private function onClick(evt:MouseEvent):void
+			{
+				trace("clicking");	
+				evt.stopPropagation();
+			}
+			
+			private function onDoubleClick(evt:MouseEvent):void
+			{
+				trace("double clicking");	
+			}
+			
+			private function handleDown(e:Event):void{
+				this.startDrag();
+				trace("starting to move event display callout : "+ this.x + " , " + this.y);
+				
+			}
+			
+			private function handleUp(e:Event):void{
+				this.stopDrag();
+				trace("moved event display callout to : "+ this.x + " , " + this.y);
+				if(this._evtItem)
+				{
+					this._evtItem.x = this.x;
+					this._evtItem.y = this.y;
+				}
+			}
+			
+			public function getCoordinates(tokenId:int):Point
+			{
+				if(tokenId <0 || this._evtItem.tokens.length >=tokenId)
+				{
+					var tile:EventAnnotatorDisplayTileComponent =this.getTileListItem(tokenId);
+					if(tile)
+					{
+						var pt:Point = new Point(tile.tokenLabel.x + tile.tokenLabel.width/2, tile.tokenLabel.y + tile.tokenLabel.height/2);
+						pt = tile.tokenLabel.localToGlobal(pt);
+						return pt;
+					}
+				}
+				return null;
+			}
+			
+			private function getTileListItem(id:int):EventAnnotatorDisplayTileComponent
+			{
+				var renderers:Array = tokensTile.renderers;
+				if(renderers && renderers.length >0 && renderers[0].length >id)
+					return EventAnnotatorDisplayTileComponent(renderers[0][id]);		
+				return null;
+			}
+			
+			
+			public function reset():void
+			{
+				this._evtItem = new LMEventAnnotationItem(-1, -1, -1, -1, new Dictionary(), new Array(), x, y, "anonymous");
+				resetLinker("");
+			}
+			
+			private function resetLinker(str:String):void
+			{
+				var a:Array = str.split(/[^\w+]/);			
+				_evtItem = new LMEventAnnotationItem(-1, -1, -1, -1, new Dictionary(), new Array(), -1, -1, "anonymous");
+				_evtItem.tokens = a;
+				updateTokens();
+				
+			}
+			
+			private function updateTokens():void
+			{
+				var i:int = 0;
+				
+				var tokensAndIds:Array = new Array();
+				for each(var token:String in _evtItem.tokens)
+				{
+					if(token == "") continue;
+					var obj:Object = new Object();
+					obj.name = token;
+					obj.id  = i++;
+					tokensAndIds.push(obj)
+				}
+				tokensTile.dataProvider = tokensAndIds;	
+			}
+			
+			public function resetLinkerWithEvtItem(evtItem:LMEventAnnotationItem):void
+			{
+				this._evtItem = evtItem;
+				updateTokens();	
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!---
+Copyright (c) 2011 Jenny Yuen. 
+MIT Computer Science and Artificial Intelligence Laboratory
+jenny@csail.mit.edu
+-->
+<mx:Button  xmlns:mx="http://www.adobe.com/2006/mxml" width="58" height="57"  skin="@Embed('assets/seekToBeginning.png')"   
+	upSkin="@Embed('assets/seekToBeginning.png')"  downSkin="@Embed('assets/seekToBeginning_down.png')"  overSkin="@Embed('assets/seekToBeginning_down.png')">
+</mx:Button>

@@ -1,0 +1,44 @@
+<!---
+Copyright (c) 2011 Jenny Yuen. 
+MIT Computer Science and Artificial Intelligence Laboratory
+jenny@csail.mit.edu
+-->
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel title="Events in this video" xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" 
+	paddingTop="10" paddingBottom="10" paddingLeft="10" paddingRight="10" xmlns:controls="com.fxcomponents.controls.*"
+	 xmlns:fxcomponents="com.fxcomponents.*">
+	<mx:Script>
+		<![CDATA[
+			
+			private function onAddEventClick():void
+			{
+				var e:LMEventsEvent = new LMEventsEvent(LMEventsEvent.ADDEVENTCLICK);
+				dispatchEvent(e);
+			}
+			public function objectItemLabelFunc(value:Object):String {
+				var text:String = "";
+				if(null!=value)
+				{
+					super.data = value;
+					//	if(""== data.name)
+					//		setStyle("backgroundColor",VLMParams.white);
+					
+					var text:String = data.name;
+					if (data.action != "")
+						text = text + " (" + data.action + ")"
+					
+				}
+				return text;
+			}
+		]]>
+	</mx:Script>
+	
+    <mx:VBox width="100%" height="100%">
+	    <controls:ExposedList id="source" width="100%" color="blue" height="100%" variableRowHeight="true" labelFunction="objectItemLabelFunc"/>
+	    <mx:HBox>
+			<mx:LinkButton x="0" y="1" label="Add event..." click="onAddEventClick()"/>
+			<mx:CheckBox/>
+			<mx:Label text="show events"/>				
+		</mx:HBox>
+    </mx:VBox>
+</mx:Panel>

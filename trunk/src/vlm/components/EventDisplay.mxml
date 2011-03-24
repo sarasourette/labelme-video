@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!---
+Copyright (c) 2011 Jenny Yuen. 
+MIT Computer Science and Artificial Intelligence Laboratory
+jenny@csail.mit.edu
+-->
+<mx:UIComponent xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300">
+	<mx:Script>
+		<![CDATA[
+			import flash.text.engine.TextLine;
+			
+			import vlm.components.annotator.Annotator;
+			import vlm.events.LMAnnotationEvent;
+			import vlm.core.LMEventAnnotationItem;
+			import vlm.events.LMEvent;
+			import vlm.events.LMEventsEvent;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Label;
+			import mx.controls.Text;
+			import mx.core.UITextField;
+			import mx.events.DragEvent;
+			import mx.events.MoveEvent;
+			
+			private var _evtItem:LMEventAnnotationItem;
+			public var _tokenLinkCoordinates:Dictionary;
+			private var _startX:Number; 
+			private var _startY:Number;
+			private var _color:Number;
+			
+			public var _scaleX:Number = NaN;
+			public var _scaleY:Number = NaN;
+			
+			private var _label:Label;
+			
+			private var HORIZONTALPADDING:uint = 10;
+			private var VERTICALPADDING:uint = 10;
+			
+			override protected function createChildren():void
+			{
+				super.createChildren();
+				this.addEventListener(MouseEvent.MOUSE_DOWN,handleDown)
+				this.addEventListener(MouseEvent.DOUBLE_CLICK, onDoubleClick);
+				this.addEventListener(MouseEvent.CLICK, onClick);
+				this.doubleClickEnabled = true;
+				_color = Annotator.getRandomYellowishColor();
+							
+				_label = new Label(); 
+				_label.text = "hellooooooooo"; 
+				_label.x = 0; 
+				_label.y = 0; 
+				_label.minWidth = 10 ; _label.minHeight = 100;
+				
+				this.addChild(_label);
+				_label.regenerateStyleCache(false);
+			}
+			
+			private function onClick(evt:MouseEvent):void
+			{
+				trace("clicking");	
+			
+				evt.stopPropagation();
+			}
+			
+			private function onDoubleClick(evt:MouseEvent):void
+			{
+				var e:LMEventsEvent = new LMEventsEvent(LMEventsEvent.SELECTEVENTREQUEST, true, true);
+				e._evtItem = this._evtItem;
+				dispatchEvent(e);
+				trace("double clicking");	
+			}
+			
+			public function draw():void
+			{
+				this.invalidateDisplayList();
+			}
+			
+			public function set evtItem(evtItem:LMEventAnnotationItem):void
+			{
+				this._evtItem = evtItem;
+			}
+			
+			public function get evtItem():LMEventAnnotationItem
+			{
+				return _evtItem;
+			}
+			
+			public function setScale(sX:Number, sY:Number):void
+			{
+				this._scaleX = sX;
+				this._scaleY = sY;
+			//	this.invalidateDisplayList();
+			}
+			
+			private function handleDown(event:MouseEvent):void{
+				//this.startDrag();
+				
+				var comp = event.target;
+				event.stopPropagation();
+				
+				this.root.addEventListener(MouseEvent.MOUSE_MOVE, handleMove);
+				this.root.addEventListener(MouseEvent.MOUSE_UP, handleUp);
+				
+				this._startX = event.stageX;
+				this._startY = event.stageY;
+						
+				trace("starting to move event display callout : "+ this.x + " , " + this.y);
+				
+			}
+			
+			private function handleMove(event:MouseEvent):void
+			{
+				var dx:Number = event.stageX - this._startX;
+				var dy:Number = event.stageY - this._startY;
+				this.x += dx;
+				this.y += dy;
+				if(this._evtItem)
+				{
+					if(!isNaN(_scaleY))
+						this._evtItem.y = this.y/this._scaleY;
+					else
+						this._evtItem.y = this.y;
+			
+					if(!isNaN(_scaleX))
+						this._evtItem.x = this.x/this._scaleX;
+					else
+						this._evtItem.x = this.x;
+					
+				}
+				this.invalidateDisplayList();
+				this._startX = event.stageX;
+				this._startY = event.stageY;
+				
+			}
+			
+			private function handleUp(e:Event):void{
+				this.root.removeEventListener(MouseEvent.MOUSE_MOVE, handleMove);
+				this.root.removeEventListener(MouseEvent.MOUSE_UP, handleUp);
+				
+				trace("moved event display callout to : "+ this.x + " , " + this.y);
+				if(this._evtItem)
+				{
+					if(!isNaN(_scaleY))
+						this._evtItem.y = this.y/this._scaleY;
+					else
+						this._evtItem.y = this.y;
+					
+					if(!isNaN(_scaleX))
+						this._evtItem.x = this.x/this._scaleX;
+					else
+						this._evtItem.x = this.x;
+				}
+				
+				if(_evtItem.eid >0)
+				{
+					var evt:LMEventsEvent = new LMEventsEvent(LMEventsEvent.EVENTCHANGED);
+					evt._evtItem = this._evtItem;
+					dispatchEvent(evt);
+				}
+				
+				this.invalidateDisplayList();
+			}
+			
+			override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+			{
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				//draw a box around the sentence
+				_label.text = _evtItem._sentence;
+				
+				var tm:TextLineMetrics = _label.measureText(_evtItem._sentence);
+			    this.setActualSize(tm.width+2*HORIZONTALPADDING, tm.height + 2*VERTICALPADDING);
+				
+				_label.setActualSize(tm.width+2*HORIZONTALPADDING, tm.height + 2*VERTICALPADDING);
+				
+				
+				//draw  a rectangle around it
+				graphics.clear();
+				
+				graphics.beginFill(VLMParams.white, 1);
+				graphics.lineStyle(10, _color, 1);
+				graphics.drawRect(0,0,tm.width,tm.height);
+				//from each of the tokenLinks draw an arrow
+				if(_tokenLinkCoordinates)
+				{
+					var runningSentence:String = "";
+					var spaceStr:String  = " ";
+					var runningTM:TextLineMetrics = _label.measureText(runningSentence);
+					var spaceStrTM:TextLineMetrics = _label.measureText(spaceStr);
+						
+					for (var i:int = 0 ; i < _evtItem.tokens.length; i++)
+					{
+						var tokenText:String = _evtItem.tokens[i];
+						var tokenTM:TextLineMetrics = _label.measureText(tokenText);
+						
+						var srcPt:Point = new Point(runningTM.width + spaceStrTM.width + tokenTM.width/2 , runningTM.height );
+						var destinationPoints:ArrayCollection = _tokenLinkCoordinates[i];
+						runningSentence += tokenText + spaceStr;
+						runningTM = _label.measureText(runningSentence);
+						
+						for each (var dstPt:Point in destinationPoints)
+						{
+							//draw an arrow
+							graphics.lineStyle(10, _color,1);
+					
+							graphics.moveTo(srcPt.x, srcPt.y);
+							graphics.lineTo(dstPt.x - this.x, dstPt.y- this.y);
+						}
+					}
+				}
+			}
+		]]>
+	</mx:Script>
+		
+</mx:UIComponent>

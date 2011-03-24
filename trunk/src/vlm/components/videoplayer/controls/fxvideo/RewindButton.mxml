@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!---
+Copyright (c) 2011 Jenny Yuen. 
+MIT Computer Science and Artificial Intelligence Laboratory
+jenny@csail.mit.edu
+-->
+<mx:Button  xmlns:mx="http://www.adobe.com/2006/mxml" width="41" height="52"   skin="@Embed('assets/rewind.png')"   
+	upSkin="@Embed('assets/rewind.png')"  downSkin="@Embed('assets/rewind_down.png')"  overSkin="@Embed('assets/rewind_down.png')"
+    disabledSkin="@Embed('assets/rewind_disabled.png')" toolTip="rewind" 
+	buttonMode="true" useHandCursor="true">
+</mx:Button>

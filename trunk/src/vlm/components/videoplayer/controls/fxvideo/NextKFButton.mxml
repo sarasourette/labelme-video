@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<mx:Button  xmlns:mx="http://www.adobe.com/2006/mxml" width="21" height="17"  skin="@Embed('assets/nextKF.png')"   
+	upSkin="@Embed('assets/nextKF.png')"  downSkin="@Embed('assets/nextKF_down.png')"  overSkin="@Embed('assets/nextKF_down.png')" disabledSkin="@Embed('assets/nextKF_disabled.png')"
+	buttonMode="true" useHandCursor="true">
+</mx:Button>
