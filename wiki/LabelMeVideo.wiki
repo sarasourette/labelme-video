@@ -10,3 +10,5 @@ and paired with human-guided annotations.
  Fill this 
 
 = Annotating events = 
+
+= instructions for installing client and server code = 
