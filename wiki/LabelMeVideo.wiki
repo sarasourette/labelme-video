@@ -12,3 +12,5 @@ and paired with human-guided annotations.
 = Annotating events = 
 
 = instructions for installing client and server code = 
+
+Credits
