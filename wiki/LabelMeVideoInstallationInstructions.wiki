@@ -1,0 +1,29 @@
+Here you will find instructions to install and deploy LabelMe video in your own server. 
+
+= System requirements = 
+
+  1. Run an Apache server.
+  1. Allow perl/CGI scripts to run.
+
+= Installation instructions = 
+
+  1. Download the LabelMeVideo source code
+  1. Unzip the downloaded file and copy the LabelMeVideo folder to where you want to run your application. For example, in Mac OS X, an Apache web server serves the user pages located in:
+{{{ 
+/Users/<username>/Sites
+}}}
+
+  Where `<username`> is your user name.  If you copy the LabelMeVideo folder here, you will be able to access the tool in a url that looks like this:
+{{{
+http://localhost/~<username>/LabelMeVideo
+}}}
+
+You should now be able to see a directory listing of the files in this folder.
+
+  1. Open {{{http://localhost/~<username>/LabelMeVideo/helloWorld.pl}}}  in your web browser. You should get a screen like this. Otherwise, this means that your web server is not properly configured to run {{{cgi}}} scripts. 
+
+
+  1. Open on {{{http://localhost/~<username>/LabelMeVideo/VLM.html}}} in your web browser. This opens the annotation tool which should look like this.
+
+
+= Annotating your own videos =
