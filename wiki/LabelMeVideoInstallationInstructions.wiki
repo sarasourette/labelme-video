@@ -21,9 +21,9 @@ http://localhost/~<username>/LabelMeVideo
 You should now be able to see a directory listing of the files in this folder.
 
   1. Open {{{http://localhost/~<username>/LabelMeVideo/helloWorld.pl}}}  in your web browser. You should get a screen like this. Otherwise, this means that your web server is not properly configured to run {{{cgi}}} scripts. 
-
+   [http://labelme-video.googlecode.com/svn/wiki/hello_world_cgi.png]
+   
 
   1. Open on {{{http://localhost/~<username>/LabelMeVideo/VLM.html}}} in your web browser. This opens the annotation tool which should look like this.
-[http://labelme-video.googlecode.com/svn/wiki/hello_world_cgi.png]
-
+   [http://labelme-video.googlecode.com/svn/wiki/vlm_debug_screenshot.png]
 = Annotating your own videos =
