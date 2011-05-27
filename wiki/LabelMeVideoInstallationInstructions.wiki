@@ -26,4 +26,8 @@ You should now be able to see a directory listing of the files in this folder.
 
   1. Open on {{{http://localhost/~<username>/LabelMeVideo/VLM.html}}} in your web browser. This opens the annotation tool which should look like this.
    [http://labelme-video.googlecode.com/svn/wiki/vlm_debug_screenshot.png]
+
+
 = Annotating your own videos =
+
+You can annotate your own videos by copying them to the {{{VLMVideos}}} folder. 
