@@ -1,16 +1,47 @@
 #labels Featured
-= Introduction =
+Here you will find instructions to install and deploy LabelMeVideo in your own server. 
 
-Currently, video analysis algorithms suffer from lack of information regarding the objects present, their interactions, as well as from missing comprehensive annotated video databases for benchmarking. LabelMeVideo is an online and openly accessible video annotation system that allows anyone with a browser and internet access to efficiently annotate object category, shape, motion, and activity information in real-world videos. Using this system, our aim is build and maintain 
-a scalable video database composed of diverse video samples
-and paired with human-guided annotations. 
+= System requirements = 
 
-= Annotating objects =
+  # Run an Apache server.
+  # Allow perl/CGI scripts to run.
 
- Fill this kj
+= Installation instructions = 
 
-= Annotating events = 
+  # Download the LabelMeVideo source code
+  # Unzip the downloaded file and copy the {{{LabelMeVideo}}} folder to where you want to run your application. For example, in Mac OS X, an Apache web server serves the user pages located in  {{{   /Users/<username>/Sites}}}, where `<username`> is your user name.  Copy the {{{LabelMeVideo}}} folder here and you should be able to see a directory listing of the files in this folder.
+  {{{
+  http://localhost/~<username>/LabelMeVideo
+  }}}  
+  # Open {{{http://localhost/~<username>/LabelMeVideo/helloWorld.pl}}}  in your web browser. You should get a screen like this. Otherwise, this means that your web server is not properly configured to run {{{cgi}}} scripts. 
+   [http://labelme-video.googlecode.com/svn/wiki/hello_world_cgi.png]
+  # Open on {{{http://localhost/~<username>/LabelMeVideo/VLM.html}}} in your web browser. This opens the annotation tool which should look like this.
+   [http://labelme-video.googlecode.com/svn/wiki/vlm_debug_screenshot.png]
+  # To set permissions
 
-= instructions for installing client and server code = 
 
-Credits
+
+
+= Annotating your own videos =
+
+You can annotate your own videos by copying them to the *{{{LabelMeVideo/VLMVideos}}}* folder.
+
+== Video requirements ==
+
+
+  * flv formatted. When encoding videos to flv, try to set for as many keyframes as possible. This step is important as a higher density of keyframes means that the video player will be able to seek into a particular frame with a higher precision. It is likely that the videos you have are not in the required format. To convert them to flv, you can use the following [http://www.ffmpeg.org/ ffmpeg] command:
+
+{{{
+ ffmpeg -i  <srcName>  -g 1 -y -an  -f flv -b 6400  -qcomp 1   <destName> -y
+}}}
+
+
+  * Metadata-injected. There are many metadata injectors available for flv video. A recommended one is [http://yamdi.sourceforge.net/  yamdi]. This step is important as the video player relies on metadata information to create the video annotations
+  
+
+== Annotations ==
+
+Your annotations will be saved as xml files and can be found in the *{{{LabelMeVideo/VLMAnnotations}}}* folder.
+
+== Contact us ==
+If you have any questions  you can send an email to [labelme@csail.mit.edu]
