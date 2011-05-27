@@ -17,7 +17,8 @@ Here you will find instructions to install and deploy LabelMeVideo in your own s
    [http://labelme-video.googlecode.com/svn/wiki/hello_world_cgi.png]
   # Open on {{{http://localhost/~<username>/LabelMeVideo/VLM.html}}} in your web browser. This opens the annotation tool which should look like this.
    [http://labelme-video.googlecode.com/svn/wiki/vlm_debug_screenshot.png]
-  # To set permissions
+  # Finally, you have to set the correct permissions to the folders so the web server scripts can write and access the annotations in the folders. The web server code works by executing a cgi script that writes the annotations as xml files into the appropriate locations. Apache runs as a user in each platform/configuration differently (e.g. in Mac OS it might run as _nobody_ while in most Linux platforms as _www-data_)
+
 
 
 
