@@ -49,7 +49,7 @@ You can load a different video by editing the _folder_ and _fileName_ fields in 
 http://localhost/~<username>/LabelMeVideo/VLM.html#folder=videos_iccv09/debug&fileName=sun_antonio_fvehgmxkrvcgxgl.flv
 }}}
 
-[http://code.google.com/p/labelme-video/source/browse/wiki/vlm_street_screenshot.png]
+[http://labelme-video.googlecode.com/svn/wiki/vlm_street_screenshot.png]
 
 == Bounding box annotation mode ==
 The default object annotation mode is set to polygon, but if you want to annotate with bounding boxes instead, you can add the _annotMode=box_ flag into the url:
