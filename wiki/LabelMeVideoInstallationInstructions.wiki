@@ -1,4 +1,4 @@
-Here you will find instructions to install and deploy LabelMe video in your own server. 
+Here you will find instructions to install and deploy LabelMeVideo in your own server. 
 
 = System requirements = 
 
