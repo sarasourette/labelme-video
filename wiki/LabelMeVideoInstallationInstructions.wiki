@@ -44,11 +44,18 @@ You can annotate your own videos by copying them to the *{{{LabelMeVideo/VLMVide
   * Metadata-injected. There are many metadata injectors available for flv video. A recommended one is [http://yamdi.sourceforge.net/  yamdi]. This step is important as the video player relies on metadata information to create the video annotations
 
 == Pointing the annotation tool to a different video ===
-You can load a different video by editing the url to:
+You can load a different video by editing the _folder_ and _fileName_ fields in the url. For example, if we wanted to load a video from the _videos_iccv09/debug_ folder named _sun_antonio_fvehgmxkrvcgxgl.flv_, the url would be as follows:
 {{{
-http://localhost/~jenny/LabelMeVideo/VLM.html#folder=<myFolder>&fileName=<myVideo.flv>
+http://localhost/~<username>/LabelMeVideo/VLM.html#folder=videos_iccv09/debug&fileName=sun_antonio_fvehgmxkrvcgxgl.flv
 }}}
-  
+
+== Bounding box annotation mode ==
+The default object annotation mode is set to polygon, but if you want to annotate with bounding boxes instead, you can add the _annotMode=box_ flag into the url:
+
+{{{
+http://localhost/~<username>/LabelMeVideo/VLM.html#folder=videos_iccv09/debug&fileName=sun_antonio_fvehgmxkrvcgxgl.flv&annotMode=box
+}}}
+ 
 
 == Annotations ==
 
