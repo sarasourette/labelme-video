@@ -31,3 +31,7 @@ You should now be able to see a directory listing of the files in this folder.
 = Annotating your own videos =
 
 You can annotate your own videos by copying them to the {{{VLMVideos}}} folder. 
+
+== Video requirements ==
+  * flv formatted
+  * Metadata-injected. There are many metadata injectors available for flv video. A recommended one is [http://yamdi.sourceforge.net/  yamdi] 
