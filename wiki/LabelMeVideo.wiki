@@ -21,11 +21,11 @@ Here you will find instructions to install and deploy LabelMeVideo in your own s
 {{{
 sudo chown -R nobody  TmpVLMAnnotations VLMAnnotations Logs
 }}}
-   In most Linux distributions Apache runs as _www-data_:
+  In most Linux distributions Apache runs as _www-data_:
 {{{
-   sudo chown -R www-data  TmpVLMAnnotations VLMAnnotations Logs 
+sudo chown -R www-data  TmpVLMAnnotations VLMAnnotations Logs 
 }}}
-
+  Finally, test that everything works by annotating an object in one of the videos, saving it, and *refreshing* the browser to make sure the annotations saved correctly.
 
 
 = Annotating your own videos =
