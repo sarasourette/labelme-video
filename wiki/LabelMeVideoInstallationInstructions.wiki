@@ -7,7 +7,7 @@ Here you will find instructions to install and deploy LabelMeVideo in your own s
 
 = Installation instructions = 
 
-  # Download the LabelMeVideo source code
+  # Download the [http://code.google.com/p/labelme-video/downloads/list LabelMeVideo source code] 
   # Unzip the downloaded file and copy the {{{LabelMeVideo}}} folder to where you want to run your application. For example, in Mac OS X, an Apache web server serves the user pages located in  {{{   /Users/<username>/Sites}}}, where `<username`> is your user name.  Copy the {{{LabelMeVideo}}} folder here and you should be able to see a directory listing of the files in this folder.
   {{{
   http://localhost/~<username>/LabelMeVideo
