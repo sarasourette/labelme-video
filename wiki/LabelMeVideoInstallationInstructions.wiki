@@ -30,10 +30,17 @@ You should now be able to see a directory listing of the files in this folder.
 
 = Annotating your own videos =
 
-You can annotate your own videos by copying them to the {{{VLMVideos}}} folder. 
+You can annotate your own videos by copying them to the {{{VLMVideos}}} folder.
 
 == Video requirements ==
-  * flv formatted. When encoding videos to flv, try to set for as many keyframes as possible. This step is important as a higher density of keyframes means that the video player will be able to seek into a particular frame with a higher precision.
+
+
+  * flv formatted. When encoding videos to flv, try to set for as many keyframes as possible. This step is important as a higher density of keyframes means that the video player will be able to seek into a particular frame with a higher precision. It is likely that the videos you have are not in the required format. To convert them to flv, you can use the following ffmpeg command:
+
+{{{
+ ffmpeg -i  `<srcName>`  -g 1 -y -an  -f flv -b 6400  -qcomp 1   `<destName>` -y
+}}}
+
 
   * Metadata-injected. There are many metadata injectors available for flv video. A recommended one is [http://yamdi.sourceforge.net/  yamdi]. This step is important as the video player relies on metadata information to create the video annotations
   
