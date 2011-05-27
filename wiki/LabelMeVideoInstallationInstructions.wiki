@@ -48,3 +48,6 @@ You can annotate your own videos by copying them to the *{{{LabelMeVideo/VLMVide
 == Annotations ==
 
 Your annotations will be saved as xml files and can be found in the *{{{LabelMeVideo/VLMAnnotations}}}* folder.
+
+== Contact us ==
+If you have any questions  you can send an email to [labelme@csail.mit.edu]
