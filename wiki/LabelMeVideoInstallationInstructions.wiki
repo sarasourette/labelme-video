@@ -42,6 +42,12 @@ You can annotate your own videos by copying them to the *{{{LabelMeVideo/VLMVide
 
 
   * Metadata-injected. There are many metadata injectors available for flv video. A recommended one is [http://yamdi.sourceforge.net/  yamdi]. This step is important as the video player relies on metadata information to create the video annotations
+
+== Pointing the annotation tool to a different video ===
+You can load a different video by editing the url to:
+{{{
+http://localhost/~jenny/LabelMeVideo/VLM.html#folder=<myFolder>&fileName=<myVideo.flv>
+}}}
   
 
 == Annotations ==
