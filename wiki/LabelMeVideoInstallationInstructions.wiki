@@ -2,30 +2,29 @@ Here you will find instructions to install and deploy LabelMeVideo in your own s
 
 = System requirements = 
 
-  1. Run an Apache server.
-  1. Allow perl/CGI scripts to run.
+  # Run an Apache server.
+  # Allow perl/CGI scripts to run.
 
 = Installation instructions = 
 
-  1. Download the LabelMeVideo source code
-  1. Unzip the downloaded file and copy the {{{LabelMeVideo}}} folder to where you want to run your application. For example, in Mac OS X, an Apache web server serves the user pages located in:
-{{{ 
-/Users/<username>/Sites
-}}}
-
-  Where `<username`> is your user name.  If you copy the {{{LabelMeVideo}}} folder here, you will be able to access the tool in a url that looks like this:
-{{{
-http://localhost/~<username>/LabelMeVideo
-}}}
-
-You should now be able to see a directory listing of the files in this folder.
-
-  1. Open {{{http://localhost/~<username>/LabelMeVideo/helloWorld.pl}}}  in your web browser. You should get a screen like this. Otherwise, this means that your web server is not properly configured to run {{{cgi}}} scripts. 
+  # Download the LabelMeVideo source code
+  # Unzip the downloaded file and copy the {{{LabelMeVideo}}} folder to where you want to run your application. For example, in Mac OS X, an Apache web server serves the user pages located in  {{{   /Users/<username>/Sites}}}, where `<username`> is your user name.  Copy the {{{LabelMeVideo}}} folder here and you should be able to see a directory listing of the files in this folder.
+  {{{
+  http://localhost/~<username>/LabelMeVideo
+  }}}  
+  # Open {{{http://localhost/~<username>/LabelMeVideo/helloWorld.pl}}}  in your web browser. You should get a screen like this. Otherwise, this means that your web server is not properly configured to run {{{cgi}}} scripts. 
    [http://labelme-video.googlecode.com/svn/wiki/hello_world_cgi.png]
-   
-
-  1. Open on {{{http://localhost/~<username>/LabelMeVideo/VLM.html}}} in your web browser. This opens the annotation tool which should look like this.
+  # Open on {{{http://localhost/~<username>/LabelMeVideo/VLM.html}}} in your web browser. This opens the annotation tool which should look like this.
    [http://labelme-video.googlecode.com/svn/wiki/vlm_debug_screenshot.png]
+  # Finally, you have to set the correct permissions to the folders so the web server scripts can write and access the annotations in the folders. The web server code works by executing a cgi script that writes the annotations as xml files into the appropriate locations. Apache runs as a user in each platform/configuration differently (e.g. in Mac OS it might run as _nobody_ while in most Linux platforms as _www-data_). Change the permissions in the following directories such that such user has access to them. For example, in a standard Mac OS X configuration you would run: 
+{{{
+sudo chown -R nobody  TmpVLMAnnotations VLMAnnotations Logs
+}}}
+  In most Linux distributions Apache runs as _www-data_:
+{{{
+sudo chown -R www-data  TmpVLMAnnotations VLMAnnotations Logs 
+}}}
+  Finally, test that everything works by annotating an object in one of the videos, saving it, and *refreshing* the browser to make sure the annotations saved correctly.
 
 
 = Annotating your own videos =
