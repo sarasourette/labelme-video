@@ -8,12 +8,12 @@ Here you will find instructions to install and deploy LabelMeVideo in your own s
 = Installation instructions = 
 
   1. Download the LabelMeVideo source code
-  1. Unzip the downloaded file and copy the LabelMeVideo folder to where you want to run your application. For example, in Mac OS X, an Apache web server serves the user pages located in:
+  1. Unzip the downloaded file and copy the {{{LabelMeVideo}}} folder to where you want to run your application. For example, in Mac OS X, an Apache web server serves the user pages located in:
 {{{ 
 /Users/<username>/Sites
 }}}
 
-  Where `<username`> is your user name.  If you copy the LabelMeVideo folder here, you will be able to access the tool in a url that looks like this:
+  Where `<username`> is your user name.  If you copy the {{{LabelMeVideo}}} folder here, you will be able to access the tool in a url that looks like this:
 {{{
 http://localhost/~<username>/LabelMeVideo
 }}}
@@ -30,7 +30,7 @@ You should now be able to see a directory listing of the files in this folder.
 
 = Annotating your own videos =
 
-You can annotate your own videos by copying them to the {{{LabelMeVideo/VLMVideos}}} folder.
+You can annotate your own videos by copying them to the *{{{LabelMeVideo/VLMVideos}}}* folder.
 
 == Video requirements ==
 
@@ -47,4 +47,4 @@ You can annotate your own videos by copying them to the {{{LabelMeVideo/VLMVideo
 
 == Annotations ==
 
-Your saved annotations can be found in the {{{LabelMeVideo/VLMAnnotations}}} folder.
+Your annotations will be saved as xml files and can be found in the *{{{LabelMeVideo/VLMAnnotations}}}* folder.
