@@ -7,7 +7,7 @@ and paired with human-guided annotations.
 
 = Annotating objects =
 
- Fill this 
+ Fill this kj
 
 = Annotating events = 
 
