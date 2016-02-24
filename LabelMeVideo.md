@@ -1,0 +1,5 @@
+Currently, video analysis algorithms suffer from lack of information regarding the objects present, their interactions, as well as from missing comprehensive annotated video databases for benchmarking. We designed an online and openly accessible video annotation system that allows anyone with a browser and internet access to efﬁciently annotate object category, shape, motion, and activity information in
+real-world videos. The annotations are also complemented with knowledge from static image databases to infer occlusion and depth information. Using this system, we have built a scalable video database composed of diverse video samples and paired with human-guided annotations.
+
+
+<a href='http://www.youtube.com/watch?feature=player_embedded&v=lxFTWYkQEv8' target='_blank'><img src='http://img.youtube.com/vi/lxFTWYkQEv8/0.jpg' width='425' height=344 /></a>

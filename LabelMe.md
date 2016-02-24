@@ -1,0 +1,5 @@
+# Introduction #
+
+Currently computers have difficultly with recognizing objects in images and video. While practical solutions exist for a few simple classes, such as human faces or cars, the more general problem of recognizing all the different classes of objects in the world (e.g. guitars, bottles, telephones) and what they are doing remains unsolved. Computer vision researchers are currently investigating methods that can recognize and localize thousands of different object categories in complex scenes. A key component of these algorithms is the data used to train the computer's model of each object. The goal of the LabelMe projects is to provide an online annotation tool to build a large database of annotated images and video by collecting contributions from many people. You can contribute to the database by visiting the annotation tool.
+
+For more details visit the [LabelMe](http://labelme.csail.mit.edu) project page and the [LabelMe video](http://labelme.csail.mit.edu/LabelMeVideo) annotation project.
